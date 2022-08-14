@@ -3,6 +3,7 @@ import discord
 from discord.ext import commands
 
 from services.guild_service import GuildService
+from services.user_service import UserService
 
 class UserCommands(commands.Cog):
     def __init__(self, bot):
@@ -18,6 +19,9 @@ class UserCommands(commands.Cog):
             return
 
         # TODO: Register user to application via backend
+        code = args[0]
+        message = await UserService.register_user(code, ctx.message.author.id, ctx.message.guild.id)
+        await channel.send(message)
 
     # Unregister user from application
     # TODO: Implement
