@@ -18,7 +18,6 @@ class UserCommands(commands.Cog):
             await channel.send("Please provide a token from our website ...")
             return
 
-        # TODO: Register user to application via backend
         code = args[0]
         message = await UserService.register_user(code, ctx.message.author.id, ctx.message.guild.id)
         await channel.send(message)
@@ -29,11 +28,22 @@ class UserCommands(commands.Cog):
     # Send user's settings for current server
     @commands.command()
     async def settings(self, ctx, *args):
-        # TODO: Implement
-        pass
+        channel = GuildService.get_text_channel(self.bot, ctx.message.guild.id, ctx.message.channel.id)
+        if len(args) == 0:
+            settings = await UserService.get_settings(ctx.message.author.id, ctx.message.guild.id)
+            if settings is None:
+                await channel.send('An unexpected error occured. Make sure you are registered to this application, use "register" command for more information.')
+                return
 
-    # Edit user's settings
-    # TODO: Implement, can be combined with settings command
+            response = '> <@%d>\'s settings:\n' % ctx.message.author.id
+            for k, v in settings.items():
+                response += '> ' + k + ': ' + str(v) + '\n'
+
+            await channel.send(response)
+            return
+
+        # TODO: Implement change settings
+        pass
 
     # Set current text channel as default text channel
     @commands.command()
