@@ -16,7 +16,9 @@ jobs:
     - name: SSH to GCE VM & perform Discord Bot deployment
       uses: fifsky/ssh-action@master
       with:
-        command: ./deploy-dcbot.sh
+        command: |
+          echo -e 'DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }}\nCOMMAND_PREFIX=?' > jadwalin-discord-bot/.env
+          ./deploy-dcbot.sh
         host: ${{ secrets.SSH_HOST_DC_BOT }}
         user: $SSH_USER
         key: ${{ secrets.SSH_PRIVATE_KEY }}
