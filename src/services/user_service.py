@@ -18,9 +18,8 @@ class UserService:
         if response.status_code == 404:
             return 'The code you entered is invalid. Please try again with a valid code.'
 
-        # TODO: handle success message
         if response.status_code == 200:
-            return 'Successfully registered user'
+            return 'Successfully registered user.'
 
         return 'Unexpected error has occured. Please try again later.'
 
@@ -49,3 +48,28 @@ class UserService:
             return response.json()['data']
 
         return None
+
+    @staticmethod
+    async def sync_calendar(user_id, server_id):
+        """
+        Parameters
+        ==========
+        arg1: user_id (int)
+        arg2: server_id (int)
+
+        Returns
+        =======
+        successful/failed message
+        """
+        response = requests.get(UserService.URL + '/sync', json={
+            'discord_id': user_id,
+            'server_id': server_id,
+        })
+
+        if response.status_code == 200:
+            return 'Successfully synced calendar.'
+
+        if response.status_code == 404:
+            return 'You\'re not registered. Use "register" command for more information.'
+
+        return 'Unexpected error has occured. Please try again later.'

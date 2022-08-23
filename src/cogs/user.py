@@ -51,5 +51,12 @@ class UserCommands(commands.Cog):
         channel = GuildService.set_text_channel(self.bot, ctx.message.guild.id, ctx.message.channel.id)
         await channel.send("Successfully set default text channel to " + ctx.message.channel.name)
 
+    # Sync calendar for user
+    @commands.command()
+    async def sync(self, ctx, *args):
+        channel = GuildService.get_text_channel(self.bot, ctx.message.guild.id, ctx.message.channel.id)
+        message = await UserService.sync_calendar(ctx.message.author.id, ctx.message.guild.id)
+        await channel.send(message)
+
 def setup(bot):
     bot.add_cog(UserCommands(bot))
