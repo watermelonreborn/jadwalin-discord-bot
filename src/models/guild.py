@@ -3,6 +3,10 @@ class Guild():
         self.id = id
         self.text_channel_id = None
 
+    def __init__(self, id, text_channel_id):
+        self.id = id
+        self.text_channel_id = text_channel_id
+
     def get_id(self):
         return self.id
 
