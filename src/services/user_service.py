@@ -1,15 +1,19 @@
 import os
 import requests
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 class UserService:
     URL = str(os.getenv("BACKEND_URL")) + '/api/user'
 
     @staticmethod
     async def register_user(register_code, user_id, server_id):
         response = requests.post(UserService.URL + '/code', json={
-            'code': register_code,
-            'discord_id': user_id,
-            'server_id': server_id,
+            'code': str(register_code),
+            'discord_id': str(user_id),
+            'server_id': str(server_id),
         })
 
         if response.status_code == 400:
@@ -40,8 +44,8 @@ class UserService:
         settings (dict)
         """
         response = requests.get(UserService.URL + '/settings', json={
-            'discord_id': user_id,
-            'server_id': server_id,
+            'discord_id': str(user_id),
+            'server_id': str(server_id),
         })
 
         if response.status_code == 200:
@@ -61,9 +65,9 @@ class UserService:
         =======
         successful/failed message
         """
-        response = requests.get(UserService.URL + '/sync', json={
-            'discord_id': user_id,
-            'server_id': server_id,
+        response = requests.post(UserService.URL + '/sync', json={
+            'discord_id': str(user_id),
+            'server_id': str(server_id),
         })
 
         if response.status_code == 200:
