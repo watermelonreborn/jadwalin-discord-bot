@@ -58,5 +58,12 @@ class UserCommands(commands.Cog):
         message = await UserService.sync_calendar(ctx.message.author.id, ctx.message.guild.id)
         await channel.send(message)
 
+    # Send user's event
+    # TODO: Implement
+    @commands.command()
+    async def event(self, ctx, *args):
+        pass
+        # channel = await GuildService.get_text_channel(self.bot, ctx.message.guild.id, ctx.message.channel.id)
+
 def setup(bot):
     bot.add_cog(UserCommands(bot))
