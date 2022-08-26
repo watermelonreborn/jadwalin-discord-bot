@@ -17,7 +17,7 @@ jobs:
       uses: fifsky/ssh-action@master
       with:
         command: |
-          echo -e 'DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }}\nCOMMAND_PREFIX=?' > jadwalin-discord-bot/.env
+          echo -e 'DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }}\nCOMMAND_PREFIX=?\nBACKEND_URL=${{ secrets.BE_USER_URL }}' > jadwalin-discord-bot/.env
           ./deploy-dcbot.sh
         host: ${{ secrets.SSH_HOST_DC_BOT }}
         user: $SSH_USER
