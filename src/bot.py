@@ -43,7 +43,9 @@ async def reminder(reminders: List[Reminder]):
     asyncio.create_task(MessageService.send_reminder(reminders))
     return {'data': 'OK'}
 
-# TODO: Add keyboard interrupt for bot run or use .start
+@app.get('/test')
+async def test():
+    return {'data': 'OK'}
+
 if __name__ == '__main__':
     uvicorn.run(app, port=5000)
-# bot.run(TOKEN)
