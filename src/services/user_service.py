@@ -116,3 +116,35 @@ class UserService:
             return 'You\'re not registered. Use "register" command for more information.'
 
         return 'Unexpected error has occured. Please try again later.'
+
+    @staticmethod
+    async def get_summary(user_id, server_id):
+        """
+        Parameters
+        ==========
+        arg1: user_id (int)
+        arg2: server_id (int)
+
+        Returns
+        =======
+        successful/failed message
+        """
+        response = requests.post(UserService.URL + '/summary', json={
+            'discord_id': str(user_id),
+            'server_id': str(server_id),
+            'days': 7,
+        })
+
+        if response.status_code == 200:
+            data = response.json()['data']
+
+            message = f'<@{user_id}> is available on:\n'
+
+            # TODO: Create message for summary
+
+            return message
+
+        if response.status_code == 404:
+            return 'You\'re not registered. Use "register" command for more information.'
+
+        return 'Unexpected error has occured. Please try again later.'
