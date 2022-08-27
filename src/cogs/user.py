@@ -59,11 +59,11 @@ class UserCommands(commands.Cog):
         await channel.send(message)
 
     # Send user's event
-    # TODO: Implement
     @commands.command()
     async def event(self, ctx, *args):
-        pass
-        # channel = await GuildService.get_text_channel(ctx.message.guild.id, ctx.message.channel.id)
+        channel = await GuildService.get_text_channel(ctx.message.guild.id, ctx.message.channel.id)
+        message = await UserService.get_events(ctx.message.author.id, ctx.message.guild.id)
+        await channel.send(message)
 
 def setup(bot):
     bot.add_cog(UserCommands(bot))
