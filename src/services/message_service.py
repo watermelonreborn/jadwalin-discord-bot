@@ -25,4 +25,4 @@ class MessageService:
                 count += 1
 
             channel = await GuildService.get_text_channel_by_id(reminder.server_id)
-            MessageService.loop.create_task(channel.send(message))
+            await channel.send(message)
