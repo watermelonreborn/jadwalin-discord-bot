@@ -43,8 +43,8 @@ async def reminder(reminders: List[Reminder]):
     asyncio.create_task(MessageService.send_reminder(reminders))
     return {'data': 'OK'}
 
-@app.get('/test')
-async def test():
+@app.get('/check')
+async def check():
     return {'data': 'OK'}
 
 if __name__ == '__main__':
