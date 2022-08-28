@@ -69,7 +69,32 @@ class UserCommands(commands.Cog):
     @commands.command()
     async def summary(self, ctx, *args):
         channel = await GuildService.get_text_channel(ctx.message.guild.id, ctx.message.channel.id)
-        message = await UserService.get_summary(ctx.message.author.id, ctx.message.guild.id)
+        message = ''
+
+        days, start_hour, end_hour = 7, 0, 24
+
+        if len(args) >= 1:
+            if not args[0].isdigit() or int(args[0]) <= 0:
+                await channel.send('Wrong input: days must be an integer greater than 0.')
+                return
+            
+            days = int(args[0])
+
+        if len(args) >= 2:
+            if not args[1].isdigit() or int(args[1]) < 0 or int(args[1]) > 24:
+                await channel.send('Wrong input: start_hour must be an integer (24 >= start_hour >= 0).')
+                return
+            
+            start_hour = int(args[1])
+
+        if len(args) >= 3:
+            if not args[2].isdigit() or int(args[2]) < start_hour or int(args[2]) > 24:
+                await channel.send('Wrong input: end_hour must be an integer. (24 >= end_hour >= start_hour')
+                return
+            
+            end_hour = int(args[2])
+
+        message = await UserService.get_summary(ctx.message.author.id, ctx.message.guild.id, days, start_hour, end_hour)
         await channel.send(message)
 
 def setup(bot):

@@ -4,6 +4,7 @@ import requests
 from dotenv import load_dotenv
 
 from models.reminder import Event
+from models.summary import Summary
 
 load_dotenv()
 
@@ -104,11 +105,17 @@ class UserService:
                 return 'You don\'t have any listed events.'
 
             message = f'<@{user_id}>\'s events:\n'
-            count = 1
+            count = 0
 
             for e in events:
                 event = Event(**e)
-                message += f'> {count}. {event.summary}\n'
+                count += 1
+
+                if event.start_time.date_time.strftime("%H:%M") == '00:00' and event.end_time.date_time.strftime("%H:%M"):
+                    message += f'> {count}. {event.summary} {event.start_time.date_time.strftime("(%d %b %Y)")}\n'
+                    continue
+
+                message += f'> {count}. {event.summary} {event.start_time.date_time.strftime("(%d %b %Y, %H:%M-") + event.end_time.date_time.strftime("%H:%M)")}\n'
 
             return message
 
@@ -118,7 +125,7 @@ class UserService:
         return 'Unexpected error has occured. Please try again later.'
 
     @staticmethod
-    async def get_summary(user_id, server_id):
+    async def get_summary(user_id, server_id, days, start_hour, end_hour):
         """
         Parameters
         ==========
@@ -132,15 +139,24 @@ class UserService:
         response = requests.post(UserService.URL + '/summary', json={
             'discord_id': str(user_id),
             'server_id': str(server_id),
-            'days': 7,
+            'days': days - 1,
+            'start_hour': start_hour,
+            'end_hour': end_hour,
         })
 
         if response.status_code == 200:
-            data = response.json()['data']
+            summaries = response.json()['data']
 
             message = f'<@{user_id}> is available on:\n'
 
-            # TODO: Create message for summary
+            for s in summaries:
+                summary = Summary(**s)
+                message += f'> {summary.date.strftime("%d %b %Y")}:'
+
+                for time in summary.availability:
+                    message += f' {time.start_hour}:00-{time.end_hour}:00,'
+
+                message = message[:-1] + '\n'
 
             return message
 
